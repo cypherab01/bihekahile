@@ -1,5 +1,5 @@
 import { ApprovalInputSchema } from '@/lib/schemas'
-import { callAunty } from '@/lib/anthropic'
+import { callAunty } from '@/lib/llm'
 import { scoreLimiter } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'

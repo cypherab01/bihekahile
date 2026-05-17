@@ -4,7 +4,7 @@
 
 **Version:** 0.1 (MVP)
 **Owner:** Arjun
-**Stack:** Next.js 16 (App Router) + TypeScript + Tailwind v4 + Anthropic API
+**Stack:** Next.js 16 (App Router) + TypeScript + Tailwind v4 + Google Gemini API
 **Domain (target):** bihekahile.com
 
 ---
@@ -91,7 +91,7 @@ Explicitly optional. Not stored. Not used for negative judgment by the prompt.
 
 ### FR-2: AI Scoring
 
-- On submit, send structured input to Anthropic API (Claude Haiku 4.5 for speed + cost).
+- On submit, send structured input to Google Gemini API (Gemini Flash Lite for speed + free tier).
 - Prompt returns strict JSON:
   `{ score, verdict, parentReaction, proposalEstimate, redFlags }`
 - Validate with Zod before rendering.
@@ -127,7 +127,7 @@ Explicitly optional. Not stored. Not used for negative judgment by the prompt.
 | AI response time | < 4s p95 |
 | Mobile-first | 90% of traffic will be mobile |
 | Devanagari support | Noto Sans Devanagari, properly subset |
-| Cost per generation | < $0.005 (Haiku pricing) |
+| Cost per generation | $0 on Gemini free tier (15 req/min) |
 | Uptime | 99% (Vercel default) |
 
 ---
@@ -147,7 +147,7 @@ Explicitly optional. Not stored. Not used for negative judgment by the prompt.
 │  └── components/                        │
 └─────────────┬───────────────────────────┘
               │
-              ├──→ Anthropic API (Claude Haiku 4.5)
+              ├──→ Google Gemini API (Flash Lite)
               └──→ Vercel Analytics
 ```
 
@@ -165,7 +165,7 @@ refresh doesn't immediately wipe the result.
 | Styling | Tailwind CSS v4 | Speed |
 | Animation | Framer Motion | Score count-up, transitions |
 | Validation | Zod | AI output + form validation |
-| AI | `@anthropic-ai/sdk` | Claude Haiku 4.5 |
+| AI | `@google/genai` | Gemini Flash Lite |
 | OG Images | `next/og` `ImageResponse` | Built into Next.js |
 | Rate limit | In-memory sliding window | Free, edge-compatible |
 | Analytics | `@vercel/analytics` | Privacy-friendly |

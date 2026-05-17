@@ -2,8 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import {
   callAunty,
   mockAunty,
-  __setAnthropicClientForTests,
-} from '@/lib/anthropic'
+  __setLlmClientForTests,
+  type LlmClient,
+} from '@/lib/llm'
 import type { ApprovalInput } from '@/lib/schemas'
 
 const baseInput: ApprovalInput = {
@@ -19,28 +20,20 @@ const baseInput: ApprovalInput = {
   caste: '',
 }
 
-function mockClient(responses: string[]) {
-  const calls: unknown[] = []
-  const messages = {
-    create: vi.fn(async (params: unknown) => {
-      calls.push(params)
-      const text =
-        responses[calls.length - 1] ?? responses[responses.length - 1]
-      return { content: [{ type: 'text', text }] }
-    }),
-  }
-  return {
-    client: { messages } as unknown as Parameters<
-      typeof __setAnthropicClientForTests
-    >[0],
-    calls,
-    messages,
-  }
+function mockClient(responses: string[]): {
+  client: LlmClient
+  generate: ReturnType<typeof vi.fn>
+} {
+  const generate = vi.fn(async () => {
+    const i = generate.mock.calls.length - 1
+    return responses[i] ?? responses[responses.length - 1]
+  })
+  return { client: { generate }, generate }
 }
 
-describe('callAunty', () => {
+describe('callAunty (Gemini)', () => {
   beforeEach(() => {
-    __setAnthropicClientForTests(null)
+    __setLlmClientForTests(null)
     delete process.env.USE_MOCK_AUNTY
   })
 
@@ -54,7 +47,7 @@ describe('callAunty', () => {
       redFlags: ['Salary thorai', 'Ghar chaina'],
     })
     const { client } = mockClient([valid])
-    __setAnthropicClientForTests(client)
+    __setLlmClientForTests(client)
 
     const out = await callAunty(baseInput)
     expect(out.score).toBe(70)
@@ -70,17 +63,17 @@ describe('callAunty', () => {
       proposalEstimate: '2-3',
       redFlags: ['x flag', 'y flag'],
     })
-    const { client, messages } = mockClient(['not json at all', valid])
-    __setAnthropicClientForTests(client)
+    const { client, generate } = mockClient(['not json at all', valid])
+    __setLlmClientForTests(client)
 
     const out = await callAunty(baseInput)
     expect(out.score).toBe(60)
-    expect(messages.create).toHaveBeenCalledTimes(2)
+    expect(generate).toHaveBeenCalledTimes(2)
   })
 
   it('throws after two failed attempts', async () => {
     const { client } = mockClient(['nope', 'still not json'])
-    __setAnthropicClientForTests(client)
+    __setLlmClientForTests(client)
     await expect(callAunty(baseInput)).rejects.toThrow()
   })
 
@@ -95,17 +88,17 @@ describe('callAunty', () => {
     })
     const fenced = '```json\n' + valid + '\n```'
     const { client } = mockClient([fenced])
-    __setAnthropicClientForTests(client)
+    __setLlmClientForTests(client)
     const out = await callAunty(baseInput)
     expect(out.verdict).toBe('approved')
   })
 
   it('honors USE_MOCK_AUNTY=true and skips API', async () => {
     process.env.USE_MOCK_AUNTY = 'true'
-    const { client, messages } = mockClient(['should not be called'])
-    __setAnthropicClientForTests(client)
+    const { client, generate } = mockClient(['should not be called'])
+    __setLlmClientForTests(client)
     const out = await callAunty(baseInput)
-    expect(messages.create).not.toHaveBeenCalled()
+    expect(generate).not.toHaveBeenCalled()
     expect(out.score).toBeGreaterThanOrEqual(0)
     expect(out.score).toBeLessThanOrEqual(100)
   })

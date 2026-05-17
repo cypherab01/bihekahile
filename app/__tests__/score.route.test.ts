@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-vi.mock('@/lib/anthropic', () => ({
+vi.mock('@/lib/llm', () => ({
   callAunty: vi.fn(),
 }))
 
 import { POST } from '@/app/api/score/route'
-import { callAunty } from '@/lib/anthropic'
+import { callAunty } from '@/lib/llm'
 
 const okBody = {
   salaryBand: '30-80k',

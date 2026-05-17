@@ -7,7 +7,8 @@ One-shot, downloadable share card, no database.
 
 ```bash
 cp .env.example .env.local
-# Edit .env.local — either set ANTHROPIC_API_KEY or USE_MOCK_AUNTY=true
+# Edit .env.local — either set GEMINI_API_KEY (free at https://aistudio.google.com/app/apikey)
+# or set USE_MOCK_AUNTY=true to skip the API entirely
 pnpm install
 pnpm dev
 ```
@@ -25,16 +26,16 @@ pnpm test:watch   # interactive
 
 1. Push this repo to GitHub.
 2. Import to Vercel.
-3. Add `ANTHROPIC_API_KEY` as an environment variable.
+3. Add `GEMINI_API_KEY` as an environment variable.
 4. Set the production domain (`bihekahile.com`).
 
 ## What's where
 
 - `app/page.tsx` — landing page, form ↔ result orchestrator
-- `app/api/score/route.ts` — POST: validate + call Claude + return JSON
+- `app/api/score/route.ts` — POST: validate + call Gemini + return JSON
 - `app/api/og/route.tsx` — GET: ImageResponse share card
 - `app/about/page.tsx` — disclaimer + how-it-works
-- `lib/` — schemas, prompt, anthropic client, rate limiter, brand constants, verdict helper
+- `lib/` — schemas, prompt, LLM client (Gemini), rate limiter, brand constants, verdict helper
 - `docs/srs.md` — the spec
 - `docs/superpowers/plans/` — implementation plans
 

@@ -35,10 +35,10 @@ export default function AboutPage() {
 
         <h2 className="text-base font-semibold mt-6">How it works</h2>
         <p>
-          You answer a short form. The answers go to Anthropic&apos;s Claude
-          Haiku 4.5 model with a heavily constrained prompt that tells it to
-          roast you, warmly. The result renders in your browser and the share
-          card is generated on the server. That&apos;s it.
+          You answer a short form. The answers go to Google&apos;s Gemini
+          model with a heavily constrained prompt that tells it to roast you,
+          warmly. The result renders in your browser and the share card is
+          generated on the server. That&apos;s it.
         </p>
 
         <p className="text-ink-soft text-xs pt-6">{DOMAIN}</p>

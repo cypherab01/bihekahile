@@ -1,4 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk'
+import { GoogleGenAI } from '@google/genai'
 import {
   AiOutputSchema,
   type AiOutput,
@@ -6,43 +6,63 @@ import {
 } from '@/lib/schemas'
 import { buildSystemPrompt, buildUserPrompt } from '@/lib/prompt'
 
-const DEFAULT_MODEL = 'claude-haiku-4-5-20251001'
+const DEFAULT_MODEL = 'gemini-3.1-flash-lite'
 
-let injected: Anthropic | null = null
+export interface LlmClient {
+  generate(args: {
+    model: string
+    systemInstruction: string
+    contents: string
+  }): Promise<string>
+}
 
-export function __setAnthropicClientForTests(c: Anthropic | null) {
+let injected: LlmClient | null = null
+
+export function __setLlmClientForTests(c: LlmClient | null) {
   injected = c
 }
 
-function getClient(): Anthropic {
+function getClient(): LlmClient {
   if (injected) return injected
-  const key = process.env.ANTHROPIC_API_KEY
-  if (!key) throw new Error('ANTHROPIC_API_KEY is not set')
-  return new Anthropic({ apiKey: key })
+  const key = process.env.GEMINI_API_KEY
+  if (!key) throw new Error('GEMINI_API_KEY is not set')
+  const ai = new GoogleGenAI({ apiKey: key })
+  return {
+    async generate({ model, systemInstruction, contents }) {
+      const resp = await ai.models.generateContent({
+        model,
+        contents,
+        config: {
+          systemInstruction,
+          responseMimeType: 'application/json',
+          temperature: 0.9,
+          maxOutputTokens: 600,
+        },
+      })
+      return resp.text ?? ''
+    },
+  }
 }
 
 function extractJson(text: string): string {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]+?)```/)
+  const trimmed = text.trim()
+  if (trimmed.startsWith('{') && trimmed.endsWith('}')) return trimmed
+  const fenced = trimmed.match(/```(?:json)?\s*([\s\S]+?)```/)
   if (fenced) return fenced[1].trim()
-  const start = text.indexOf('{')
-  const end = text.lastIndexOf('}')
-  if (start >= 0 && end > start) return text.slice(start, end + 1)
-  return text.trim()
+  const start = trimmed.indexOf('{')
+  const end = trimmed.lastIndexOf('}')
+  if (start >= 0 && end > start) return trimmed.slice(start, end + 1)
+  return trimmed
 }
 
 async function callOnce(input: ApprovalInput): Promise<AiOutput> {
   const client = getClient()
-  const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL
-  const resp = await client.messages.create({
+  const model = process.env.GEMINI_MODEL || DEFAULT_MODEL
+  const text = await client.generate({
     model,
-    max_tokens: 600,
-    system: buildSystemPrompt(),
-    messages: [{ role: 'user', content: buildUserPrompt(input) }],
+    systemInstruction: buildSystemPrompt(),
+    contents: buildUserPrompt(input),
   })
-  const block = resp.content.find(
-    (b: { type: string }) => b.type === 'text',
-  ) as { type: 'text'; text: string } | undefined
-  const text = block?.text ?? ''
   const json = extractJson(text)
   const parsed = JSON.parse(json)
   return AiOutputSchema.parse(parsed)
