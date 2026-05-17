@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Noto_Sans_Devanagari } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { APP_NAME_LATIN, APP_TAGLINE, DOMAIN } from '@/lib/brand'
 import './globals.css'
 
@@ -43,6 +44,7 @@ export default function RootLayout({
         {children}
         <Analytics />
       </body>
+      <GoogleAnalytics gaId="G-07ZW1JB97H" />
     </html>
   )
 }
