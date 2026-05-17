@@ -113,31 +113,33 @@ export function mockAunty(input: ApprovalInput): AiOutput {
           : 'emergency'
 
   const reactions: Record<AiOutput['verdict'], string> = {
-    approved: `${input.job.charAt(0).toUpperCase() + input.job.slice(1)} with an actual salary. Aunty has had worse Mondays. The proposals will arrive whether you want them or not — bichara, even the Sharma cousin will be interested.`,
-    conditional: `${input.job.charAt(0).toUpperCase() + input.job.slice(1)} is acceptable, but the rest reads like a half-finished CV. We will need to lie strategically before any rishta meeting. Dukha lagyo, but workable.`,
-    disappointed: `On paper, you exist. In practice, the neighbors are already drafting their gossip. Aunty's friend Geeta's son is doing better at half your age, and that comparison will be repeated at every family puja for a decade.`,
-    emergency: `Aamabuwa has stopped attending the puja. The priest has been called. The family WhatsApp group is in mourning. Marriage is no longer the goal — survival is.`,
+    approved: `${input.job.charAt(0).toUpperCase() + input.job.slice(1)} ho, salary pani thik — Sushma ko chhora le yo profile padhera depression ma jancha. Proposal ko line lagcha — actual line. Tara ahile dekhi humble bhayera basa.`,
+    conditional: `${input.job.charAt(0).toUpperCase() + input.job.slice(1)} ta thik tara ${input.vehicle === 'scooter' || input.vehicle === 'none' ? 'scooter chadhera 28 ma — Bishal ko Fortuner 3 barsa puranai bhaisakyo' : 'salary ramro chaina'}. Basically tenant with a job title. Rishta meeting ma half kura luka-aune ho.`,
+    disappointed: `${input.job === 'freelancer' ? 'Freelancer — code for "WiFi sangai bekaar"' : 'Yo CV pani CV ho?'}. Aaja bholi ko bachha haru UPSC dindai chhan, timi laptop boki coffee shop ma berauchhau. Geeta aunty laai call ja-na bhayo — news ramro hoina.`,
+    emergency: `Yo CV padhera aunty ko chiya thanda bhayo. Job chaina, bani-byabahaar pani prasna, basic survival pani audit garnu parne. Priest call gareko cha — for you, not the marriage.`,
   }
 
   const flags: string[] = []
   if (input.salaryBand === '<30k')
-    flags.push('Salary borderline charity case')
+    flags.push('Salary basically charity case')
   if (input.cooking === 'cant')
-    flags.push('Cannot make daal-bhaat. Will starve in-laws.')
+    flags.push('Daal-bhaat pani aaudaina — future divorce confirmed')
   if (input.drinksSmokes === 'regularly')
-    flags.push('Drinks openly. Aunties have noticed.')
+    flags.push('Khulasta piune-khane — aunties have noticed')
   if (input.drinksSmokes === 'secret')
-    flags.push('Hides drinking from parents — coward AND drunk')
-  if (input.ownsHouse === 'no') flags.push('Rents like a college student')
-  if (input.vehicle === 'none') flags.push('No vehicle. Walking partner.')
+    flags.push('Aamabuwa lai luka-aune — coward AND guilty')
+  if (input.ownsHouse === 'no')
+    flags.push('Rent ma — tenant with extra steps')
+  if (input.vehicle === 'none')
+    flags.push('Vehicle chaina, walking partner')
   if (input.maritalStatus === 'single' && input.age >= 28)
-    flags.push(`${input.age} and unmarried. Log ke kahenge?`)
+    flags.push(`${input.age} ma single — log ke kahenge?`)
   if (input.job === 'unemployed')
-    flags.push('Unemployed adult. Existential threat.')
+    flags.push('Bekaar adult — existential threat')
   if (input.job === 'freelancer')
-    flags.push('"Freelancer" — code for unemployed with a router')
+    flags.push('"Freelancer" — WiFi sangai bekaar')
   if (flags.length < 2)
-    flags.push('Aunty smells deception in the answers')
+    flags.push('Kura luka-aune jasto — aunty smells deception')
 
   return {
     score: s,
@@ -145,12 +147,12 @@ export function mockAunty(input: ApprovalInput): AiOutput {
     parentReaction: reactions[verdict],
     proposalEstimate:
       verdict === 'approved'
-        ? 'Five or six. All sincere.'
+        ? 'Pacha-cha jana — sincere haru. Geeta aunty matra kohi mathi sochirakkhi cha.'
         : verdict === 'conditional'
-          ? 'Two. Both from desperate aunties.'
+          ? 'Dui jana — duitai desperate aunty haru bata.'
           : verdict === 'disappointed'
-            ? 'One. From a distant cousin nobody likes.'
-            : 'Zero. Aamabuwa cancelled Dashain.',
+            ? 'Ek jana — dur ko relative jasle kohi chinchhainan.'
+            : 'Zero — aamabuwa le Dashain cancel garne kura garchhan.',
     redFlags: flags.slice(0, 4),
   }
 }

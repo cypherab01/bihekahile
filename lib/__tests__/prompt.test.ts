@@ -8,7 +8,7 @@ describe('buildSystemPrompt', () => {
   it('forbids caste-based judgment', () => {
     expect(sp.toLowerCase()).toMatch(/caste/)
     expect(sp.toLowerCase()).toMatch(
-      /never (judge|use|mock).*caste|forbidden.*caste/,
+      /never (judge|use|mock|reference|mention).*caste|forbidden.*caste|ignore.*caste/,
     )
   })
 
