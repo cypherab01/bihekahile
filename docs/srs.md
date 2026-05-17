@@ -5,7 +5,7 @@
 **Version:** 0.1 (MVP)
 **Owner:** Arjun
 **Stack:** Next.js 16 (App Router) + TypeScript + Tailwind v4 + Google Gemini API
-**Domain (target):** bihekaile.abhishekg.info.np
+**Domain (target):** bihekahile.abhishekg.info.np
 
 ---
 
@@ -233,7 +233,7 @@ spreads via image, not URL.
 | Question | Answer |
 |----------|--------|
 | Humor edginess | Spicy — sharp roasts, no slurs / taboo |
-| Domain direction | `bihekaile.abhishekg.info.np` ("Bihe Kahile?" / "बिहे कहिले?") |
+| Domain direction | `bihekahile.abhishekg.info.np` ("Bihe Kahile?" / "बिहे कहिले?") |
 | Result persistence | One-shot, download card only — no DB |
 
 ---
