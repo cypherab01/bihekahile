@@ -45,9 +45,9 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-md px-5 flex-1">
-      <BrandHeader />
-      <div className="pt-2">
+    <main className="mx-auto w-full max-w-md sm:max-w-2xl px-4 sm:px-6 flex-1">
+      <BrandHeader compact={!!snap} />
+      <div>
         {snap ? (
           <ResultCard
             input={snap.input}
@@ -55,11 +55,11 @@ export default function Home() {
             onRestart={handleRestart}
           />
         ) : (
-          <section className="rounded-3xl border border-card-border bg-card/80 backdrop-blur p-6 shadow-soft">
-            <h2 className="text-xl font-semibold text-ink mb-1">
+          <section className="rounded-2xl border border-card-border bg-card/80 backdrop-blur p-4 sm:p-6 shadow-soft">
+            <h2 className="text-lg sm:text-xl font-semibold text-ink mb-0.5">
               Let aunty judge.
             </h2>
-            <p className="text-sm text-ink-soft mb-5">
+            <p className="text-xs sm:text-sm text-ink-soft mb-4">
               Answer honestly. We won&apos;t tell aamabuwa.
             </p>
             <ApprovalForm onResult={handleResult} />

@@ -35,13 +35,16 @@ interface TextProps extends BaseProps {
 
 type Props = SelectProps | NumberProps | TextProps
 
+const CONTROL =
+  'w-full rounded-lg border border-card-border bg-card px-3 py-2 text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-marigold'
+
 export function FormField(props: Props) {
   return (
     <label className="block">
-      <span className="block text-sm font-semibold text-ink mb-1.5">
+      <span className="block text-[13px] font-semibold text-ink mb-1 leading-tight">
         {props.label}
         {!props.required && (
-          <span className="ml-1 text-xs font-normal text-ink-soft">
+          <span className="ml-1 text-[11px] font-normal text-ink-soft">
             (optional)
           </span>
         )}
@@ -51,7 +54,7 @@ export function FormField(props: Props) {
           name={props.name}
           defaultValue={props.defaultValue ?? ''}
           required={props.required}
-          className="w-full rounded-xl border border-card-border bg-card px-3 py-2.5 text-base shadow-soft focus:outline-none focus:ring-2 focus:ring-marigold appearance-none"
+          className={`${CONTROL} appearance-none`}
         >
           <option value="" disabled>
             Choose…
@@ -71,7 +74,7 @@ export function FormField(props: Props) {
           defaultValue={props.defaultValue}
           required={props.required}
           inputMode="numeric"
-          className="w-full rounded-xl border border-card-border bg-card px-3 py-2.5 text-base shadow-soft focus:outline-none focus:ring-2 focus:ring-marigold"
+          className={CONTROL}
         />
       ) : (
         <input
@@ -80,11 +83,11 @@ export function FormField(props: Props) {
           placeholder={props.placeholder}
           defaultValue={props.defaultValue}
           maxLength={60}
-          className="w-full rounded-xl border border-card-border bg-card px-3 py-2.5 text-base shadow-soft focus:outline-none focus:ring-2 focus:ring-marigold"
+          className={CONTROL}
         />
       )}
       {props.helper && (
-        <span className="mt-1.5 block text-xs text-ink-soft">
+        <span className="mt-1 block text-[11px] text-ink-soft leading-snug">
           {props.helper}
         </span>
       )}

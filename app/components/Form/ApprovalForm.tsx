@@ -58,83 +58,99 @@ export function ApprovalForm({ onResult }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <FormField
-        type="number"
-        name="age"
-        label="Age"
-        required
-        min={16}
-        max={80}
-        defaultValue={25}
-      />
-      <FormField
-        type="select"
-        name="maritalStatus"
-        label="Marital status"
-        required
-        options={MARITAL_OPTIONS}
-      />
-      <FormField
-        type="select"
-        name="country"
-        label="Where do you live?"
-        required
-        options={COUNTRY_OPTIONS}
-      />
-      <FormField
-        type="select"
-        name="job"
-        label="What do you do?"
-        required
-        options={JOB_OPTIONS}
-      />
-      <FormField
-        type="select"
-        name="salaryBand"
-        label="Monthly salary (NPR)"
-        required
-        options={SALARY_OPTIONS}
-      />
-      <FormField
-        type="select"
-        name="ownsHouse"
-        label="Own a house?"
-        required
-        options={HOUSE_OPTIONS}
-      />
-      <FormField
-        type="select"
-        name="vehicle"
-        label="Vehicle"
-        required
-        options={VEHICLE_OPTIONS}
-      />
-      <FormField
-        type="select"
-        name="cooking"
-        label="Daal-bhaat skill"
-        required
-        options={COOKING_OPTIONS}
-      />
-      <FormField
-        type="select"
-        name="drinksSmokes"
-        label="Drinks / smokes?"
-        required
-        options={DRINKS_OPTIONS}
-      />
-      <FormField
-        type="text"
-        name="caste"
-        label="Caste"
-        helper={
-          <>
-            Optional. We won&apos;t store this. Leave blank —{' '}
-            <em>none of aunty&apos;s business.</em>
-          </>
-        }
-      />
+    <form onSubmit={handleSubmit} className="space-y-3.5">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-3.5 sm:grid-cols-3">
+        <FormField
+          type="number"
+          name="age"
+          label="Age"
+          required
+          min={16}
+          max={80}
+          defaultValue={25}
+        />
+        <FormField
+          type="select"
+          name="maritalStatus"
+          label="Marital"
+          required
+          options={MARITAL_OPTIONS}
+        />
+        <div className="col-span-2 sm:col-span-1">
+          <FormField
+            type="select"
+            name="country"
+            label="Country"
+            required
+            options={COUNTRY_OPTIONS}
+          />
+        </div>
+
+        <div className="col-span-2 sm:col-span-2">
+          <FormField
+            type="select"
+            name="job"
+            label="What do you do?"
+            required
+            options={JOB_OPTIONS}
+          />
+        </div>
+        <FormField
+          type="select"
+          name="salaryBand"
+          label="Salary (NPR)"
+          required
+          options={SALARY_OPTIONS}
+        />
+
+        <FormField
+          type="select"
+          name="ownsHouse"
+          label="Own a house?"
+          required
+          options={HOUSE_OPTIONS}
+        />
+        <FormField
+          type="select"
+          name="vehicle"
+          label="Vehicle"
+          required
+          options={VEHICLE_OPTIONS}
+        />
+        <div className="col-span-2 sm:col-span-1">
+          <FormField
+            type="select"
+            name="cooking"
+            label="Daal-bhaat skill"
+            required
+            options={COOKING_OPTIONS}
+          />
+        </div>
+
+        <div className="col-span-2 sm:col-span-3">
+          <FormField
+            type="select"
+            name="drinksSmokes"
+            label="Drinks / smokes?"
+            required
+            options={DRINKS_OPTIONS}
+          />
+        </div>
+
+        <div className="col-span-2 sm:col-span-3">
+          <FormField
+            type="text"
+            name="caste"
+            label="Caste"
+            helper={
+              <>
+                Optional, not stored —{' '}
+                <em>none of aunty&apos;s business.</em>
+              </>
+            }
+          />
+        </div>
+      </div>
 
       {error && (
         <p role="alert" className="text-sm text-sindoor">
@@ -145,7 +161,7 @@ export function ApprovalForm({ onResult }: Props) {
       <button
         type="submit"
         disabled={pending}
-        className="relative overflow-hidden w-full rounded-xl bg-marigold-deep px-5 py-3.5 font-semibold text-white shadow-soft transition-colors hover:bg-marigold disabled:opacity-60"
+        className="relative overflow-hidden w-full rounded-xl bg-marigold-deep px-5 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-marigold disabled:opacity-60"
       >
         {pending && (
           <span

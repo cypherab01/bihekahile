@@ -15,7 +15,7 @@ export function AnimatedScore({ value }: Props) {
   useEffect(() => {
     const unsubscribe = rounded.on('change', setDisplay)
     const controls = animate(count, value, {
-      duration: 1.6,
+      duration: 1.4,
       ease: 'easeOut',
     })
     return () => {
@@ -26,20 +26,20 @@ export function AnimatedScore({ value }: Props) {
 
   return (
     <div className="text-center">
+      <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-ink-soft mb-0.5">
+        Aunty Approval
+      </p>
       <motion.div
-        className="text-[7rem] sm:text-[8rem] leading-none font-bold tracking-tight text-ink"
+        className="text-[5.5rem] sm:text-[7rem] leading-[0.9] font-bold tracking-tight text-ink"
         initial={{ scale: 0.7, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        transition={{ duration: 0.55, ease: 'easeOut' }}
       >
         <span>{display}</span>
-        <span className="text-[2.5rem] sm:text-[3rem] text-ink-soft">
+        <span className="text-[2rem] sm:text-[2.5rem] text-ink-soft">
           /100
         </span>
       </motion.div>
-      <p className="mt-1 text-sm uppercase tracking-widest text-ink-soft">
-        Aunty Approval
-      </p>
     </div>
   )
 }

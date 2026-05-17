@@ -21,7 +21,7 @@ function buildOgUrl(out: AiOutput, format: 'story' | 'square') {
 
 export function ShareActions({ output }: Props) {
   const [status, setStatus] = useState<string | null>(null)
-  const [busy, setBusy] = useState<'story' | 'square' | null>(null)
+  const [busy, setBusy] = useState<'story' | 'square' | 'share' | null>(null)
 
   async function downloadCard(format: 'story' | 'square') {
     setStatus(null)
@@ -48,6 +48,7 @@ export function ShareActions({ output }: Props) {
 
   async function share() {
     setStatus(null)
+    setBusy('share')
     const shareText = `Aunty gave me ${output.score}/100 on ${DOMAIN}. Try it.`
     if (typeof navigator !== 'undefined' && 'share' in navigator) {
       try {
@@ -56,6 +57,7 @@ export function ShareActions({ output }: Props) {
           text: shareText,
           url: `https://${DOMAIN}`,
         })
+        setBusy(null)
         return
       } catch {
         // fall through to clipboard
@@ -66,35 +68,41 @@ export function ShareActions({ output }: Props) {
       setStatus('Link copied to clipboard.')
     } catch {
       setStatus('Could not copy. Long-press the URL bar to share.')
+    } finally {
+      setBusy(null)
     }
   }
 
+  const btn =
+    'rounded-xl px-3 py-2 text-[13px] font-semibold transition-colors disabled:opacity-60 flex items-center justify-center gap-1.5'
+
   return (
-    <div className="space-y-2">
-      <div className="grid grid-cols-2 gap-2">
+    <div className="space-y-1.5">
+      <div className="grid grid-cols-3 gap-1.5">
         <button
           onClick={() => downloadCard('story')}
           disabled={busy !== null}
-          className="rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink-soft disabled:opacity-60"
+          className={`${btn} bg-ink text-white hover:bg-ink-soft`}
         >
-          {busy === 'story' ? 'Saving…' : 'Download (story)'}
+          {busy === 'story' ? '…' : 'Story'}
         </button>
         <button
           onClick={() => downloadCard('square')}
           disabled={busy !== null}
-          className="rounded-xl bg-ink/90 px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink-soft disabled:opacity-60"
+          className={`${btn} bg-ink text-white hover:bg-ink-soft`}
         >
-          {busy === 'square' ? 'Saving…' : 'Download (square)'}
+          {busy === 'square' ? '…' : 'Square'}
+        </button>
+        <button
+          onClick={share}
+          disabled={busy !== null}
+          className={`${btn} bg-marigold-deep text-white shadow-soft hover:bg-marigold`}
+        >
+          {busy === 'share' ? '…' : 'Share'}
         </button>
       </div>
-      <button
-        onClick={share}
-        className="w-full rounded-xl bg-marigold-deep px-4 py-2.5 text-sm font-semibold text-white shadow-soft hover:bg-marigold"
-      >
-        Share aunty&apos;s verdict
-      </button>
       {status && (
-        <p className="text-xs text-ink-soft text-center">{status}</p>
+        <p className="text-[11px] text-ink-soft text-center">{status}</p>
       )}
     </div>
   )
