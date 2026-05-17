@@ -113,23 +113,31 @@ export function mockAunty(input: ApprovalInput): AiOutput {
           : 'emergency'
 
   const reactions: Record<AiOutput['verdict'], string> = {
-    approved: `Wah! ${input.job} ho, ramro keto/keti rahecha. Aja bholi ko time ma yesto manche pauna gahro cha. Pakka proposal pathaune.`,
-    conditional: `Hmm. ${input.job} ta ramro ho tara euta-duita kura milauna parcha. Salary tira pani dhyaan pugnu paryo ni.`,
-    disappointed: `Aunty malai dukha lagyo. ${input.job} bhanera bujhaucha tara saath ma ${input.drinksSmokes === 'regularly' ? 'piune-khane' : 'arko'} kura sune.`,
-    emergency: `Yo ke ho? Buwa-aamalai ke bhanne? Pheri socha — aja bholi yo umer ma kheri yesto hunchha?`,
+    approved: `${input.job.charAt(0).toUpperCase() + input.job.slice(1)} with an actual salary. Aunty has had worse Mondays. The proposals will arrive whether you want them or not — bichara, even the Sharma cousin will be interested.`,
+    conditional: `${input.job.charAt(0).toUpperCase() + input.job.slice(1)} is acceptable, but the rest reads like a half-finished CV. We will need to lie strategically before any rishta meeting. Dukha lagyo, but workable.`,
+    disappointed: `On paper, you exist. In practice, the neighbors are already drafting their gossip. Aunty's friend Geeta's son is doing better at half your age, and that comparison will be repeated at every family puja for a decade.`,
+    emergency: `Aamabuwa has stopped attending the puja. The priest has been called. The family WhatsApp group is in mourning. Marriage is no longer the goal — survival is.`,
   }
 
   const flags: string[] = []
-  if (input.salaryBand === '<30k') flags.push('Salary atti kam')
-  if (input.cooking === 'cant') flags.push('Daal-bhaat pani aaudaina')
-  if (input.drinksSmokes === 'regularly') flags.push('Piune-khane ko bani')
+  if (input.salaryBand === '<30k')
+    flags.push('Salary borderline charity case')
+  if (input.cooking === 'cant')
+    flags.push('Cannot make daal-bhaat. Will starve in-laws.')
+  if (input.drinksSmokes === 'regularly')
+    flags.push('Drinks openly. Aunties have noticed.')
   if (input.drinksSmokes === 'secret')
-    flags.push('Aamabuwa lai luka-aune adat')
-  if (input.ownsHouse === 'no') flags.push('Aafno ghar chaina')
-  if (input.vehicle === 'none') flags.push('Sawari sadhan ekdam chaina')
+    flags.push('Hides drinking from parents — coward AND drunk')
+  if (input.ownsHouse === 'no') flags.push('Rents like a college student')
+  if (input.vehicle === 'none') flags.push('No vehicle. Walking partner.')
   if (input.maritalStatus === 'single' && input.age >= 28)
-    flags.push(`${input.age} bhayo, bihe kahile?`)
-  if (flags.length < 2) flags.push('Kura sunne aadat thorai cha jasto cha')
+    flags.push(`${input.age} and unmarried. Log ke kahenge?`)
+  if (input.job === 'unemployed')
+    flags.push('Unemployed adult. Existential threat.')
+  if (input.job === 'freelancer')
+    flags.push('"Freelancer" — code for unemployed with a router')
+  if (flags.length < 2)
+    flags.push('Aunty smells deception in the answers')
 
   return {
     score: s,
@@ -137,12 +145,12 @@ export function mockAunty(input: ApprovalInput): AiOutput {
     parentReaction: reactions[verdict],
     proposalEstimate:
       verdict === 'approved'
-        ? '5-8 proposals this Dashain'
+        ? 'Five or six. All sincere.'
         : verdict === 'conditional'
-          ? '2-4 proposals'
+          ? 'Two. Both from desperate aunties.'
           : verdict === 'disappointed'
-            ? '1 proposal (from a dur ko relative)'
-            : '0 proposals (aunty cancelling Dashain plans)',
+            ? 'One. From a distant cousin nobody likes.'
+            : 'Zero. Aamabuwa cancelled Dashain.',
     redFlags: flags.slice(0, 4),
   }
 }

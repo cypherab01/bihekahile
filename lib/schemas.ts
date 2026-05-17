@@ -64,7 +64,7 @@ export const AiOutputSchema = z.object({
   score: z.number().int().min(0).max(100),
   verdict: VerdictSchema,
   parentReaction: z.string().min(20).max(600),
-  proposalEstimate: z.string().min(3).max(80),
+  proposalEstimate: z.string().min(3).max(160),
   redFlags: z.array(z.string().min(2).max(120)).min(1).max(6),
 })
 
