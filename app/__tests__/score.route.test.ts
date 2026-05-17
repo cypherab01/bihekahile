@@ -17,6 +17,7 @@ const okBody = {
   drinksSmokes: 'occasionally',
   age: 27,
   maritalStatus: 'single',
+  gender: 'woman',
   caste: '',
 }
 

@@ -15,6 +15,7 @@ const validInput = {
   drinksSmokes: 'occasionally',
   age: 27,
   maritalStatus: 'single',
+  gender: 'woman',
   caste: '',
 }
 
@@ -50,6 +51,25 @@ describe('ApprovalInputSchema', () => {
     const { caste: _omit, ...rest } = validInput
     const parsed = ApprovalInputSchema.parse(rest)
     expect(parsed.caste).toBe('')
+  })
+
+  it('accepts the three gender values', () => {
+    for (const g of ['man', 'woman', 'skip']) {
+      expect(() =>
+        ApprovalInputSchema.parse({ ...validInput, gender: g }),
+      ).not.toThrow()
+    }
+  })
+
+  it('rejects unknown gender values', () => {
+    expect(() =>
+      ApprovalInputSchema.parse({ ...validInput, gender: 'other' }),
+    ).toThrow()
+  })
+
+  it('requires gender (no default)', () => {
+    const { gender: _omit, ...rest } = validInput
+    expect(() => ApprovalInputSchema.parse(rest)).toThrow()
   })
 })
 

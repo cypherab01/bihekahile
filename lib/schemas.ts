@@ -33,6 +33,7 @@ export const DrinksSmokes = z.enum([
   'secret',
 ])
 export const MaritalStatus = z.enum(['single', 'dating', 'engaged', 'married'])
+export const Gender = z.enum(['man', 'woman', 'skip'])
 
 export const ApprovalInputSchema = z.object({
   salaryBand: SalaryBand,
@@ -44,6 +45,7 @@ export const ApprovalInputSchema = z.object({
   drinksSmokes: DrinksSmokes,
   age: z.number().int().min(16).max(80),
   maritalStatus: MaritalStatus,
+  gender: Gender,
   caste: z
     .string()
     .transform((s) => s.slice(0, 60))

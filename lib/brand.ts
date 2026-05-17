@@ -4,3 +4,6 @@ export const APP_TAGLINE = "Aunty's official approval calculator"
 export const DOMAIN = 'bihekahile.abhishekg.info.np'
 export const DISCLAIMER =
   "Just for fun. Not a real judgment. Your aunty's opinion is not your worth."
+
+export const PERSONA_NAME = 'Chimeki Aunty'
+export const PERSONA_NAME_DEVA = 'छिमेकी आन्टी'

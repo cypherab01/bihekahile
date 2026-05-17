@@ -63,3 +63,9 @@ export const MARITAL_OPTIONS = [
   { value: 'engaged', label: 'Engaged' },
   { value: 'married', label: 'Married' },
 ] as const
+
+export const GENDER_OPTIONS = [
+  { value: 'woman', label: 'Woman' },
+  { value: 'man', label: 'Man' },
+  { value: 'skip', label: 'Skip — none of aunty’s business' },
+] as const

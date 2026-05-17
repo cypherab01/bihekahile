@@ -17,6 +17,7 @@ const baseInput: ApprovalInput = {
   drinksSmokes: 'occasionally',
   age: 27,
   maritalStatus: 'single',
+  gender: 'woman',
   caste: '',
 }
 
@@ -128,5 +129,22 @@ describe('mockAunty', () => {
       salaryBand: '200k+',
     })
     expect(out.score).toBeGreaterThan(70)
+  })
+
+  it('gender changes reaction flavor but NOT score or red flags (severity proof)', () => {
+    const woman = mockAunty({ ...baseInput, gender: 'woman' })
+    const man = mockAunty({ ...baseInput, gender: 'man' })
+    const skip = mockAunty({ ...baseInput, gender: 'skip' })
+
+    // Severity is gender-blind: score and red flags identical
+    expect(woman.score).toBe(man.score)
+    expect(woman.score).toBe(skip.score)
+    expect(woman.redFlags).toEqual(man.redFlags)
+    expect(woman.redFlags).toEqual(skip.redFlags)
+
+    // Flavor differs: each gender gets its own reaction string
+    expect(woman.parentReaction).not.toEqual(man.parentReaction)
+    expect(woman.parentReaction).not.toEqual(skip.parentReaction)
+    expect(man.parentReaction).not.toEqual(skip.parentReaction)
   })
 })

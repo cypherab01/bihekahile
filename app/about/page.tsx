@@ -1,5 +1,10 @@
 import type { Metadata } from 'next'
-import { DISCLAIMER, DOMAIN, APP_NAME_LATIN } from '@/lib/brand'
+import {
+  DISCLAIMER,
+  DOMAIN,
+  APP_NAME_LATIN,
+  PERSONA_NAME,
+} from '@/lib/brand'
 
 export const metadata: Metadata = {
   title: `About — ${APP_NAME_LATIN}`,
@@ -20,6 +25,12 @@ export default function AboutPage() {
           a stereotypical Nepali aunty and gives your life choices a score out
           of 100, plus a list of &quot;red flags&quot; and an estimate of how
           many Dashain proposals you&apos;d get.
+        </p>
+        <p>
+          Your judge today is <strong>{PERSONA_NAME}</strong>. She&apos;s seen
+          things. Her tone shifts with your gender — different cousins, different
+          doomsday scenarios — but her severity does not. Same penalty for the
+          same behavior, regardless of who you are.
         </p>
         <p>{DISCLAIMER}</p>
 

@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { VerdictSchema, type Verdict } from '@/lib/schemas'
 import { verdictAccent, verdictLabelPlain } from '@/lib/verdict'
-import { DOMAIN, APP_NAME_LATIN } from '@/lib/brand'
+import { DOMAIN, APP_NAME_LATIN, PERSONA_NAME } from '@/lib/brand'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -75,6 +75,17 @@ export async function GET(req: Request) {
             }}
           >
             Aunty Approval Score
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              fontSize: 20,
+              color: '#7a5a3a',
+              marginTop: 4,
+              fontStyle: 'italic',
+            }}
+          >
+            Judged by {PERSONA_NAME}
           </div>
 
           <div

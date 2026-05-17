@@ -10,6 +10,7 @@ import {
   COOKING_OPTIONS,
   DRINKS_OPTIONS,
   MARITAL_OPTIONS,
+  GENDER_OPTIONS,
 } from './FORM_OPTIONS'
 import {
   ApprovalInputSchema,
@@ -71,12 +72,19 @@ export function ApprovalForm({ onResult }: Props) {
         />
         <FormField
           type="select"
+          name="gender"
+          label="Gender"
+          required
+          options={GENDER_OPTIONS}
+        />
+        <FormField
+          type="select"
           name="maritalStatus"
           label="Marital"
           required
           options={MARITAL_OPTIONS}
         />
-        <div className="col-span-2 sm:col-span-1">
+        <div className="col-span-2 sm:col-span-3">
           <FormField
             type="select"
             name="country"

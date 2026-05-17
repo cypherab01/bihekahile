@@ -85,6 +85,44 @@ export async function callAunty(input: ApprovalInput): Promise<AiOutput> {
   }
 }
 
+type Verdict = AiOutput['verdict']
+type Gender = ApprovalInput['gender']
+
+const REACTIONS: Record<Verdict, Record<Gender, string>> = {
+  approved: {
+    woman:
+      'Doctor, ghar aafno, daal-bhaat pakauna aaucha — Geeta aunty ko bhanji Anjali yo CV padhera apnai sagaai cancel garchhe. Proposal ko line — actual line. Tara humble bhayera basa, perfect chhori haru pani jhuto agreement ma dubeko cha.',
+    man: 'Doctor ho, ghar aafno, gaadi chha — Sushma ko chhora Bishal yo CV padhera depression ma janchha. Proposal ko line — actual line — Pokhara samma. Tara humble bhayera basa, perfect keto haru pani aaja bholi tax fraud ma fanseko cha.',
+    skip: 'Yo CV ramro cha — tero batch ma kasailai DM ma screenshot ja-na thaalisko. Proposal ko line lagcha — actual line. Tara humble bhayera basa, aaja ko ramro CV bholi ko regret ho.',
+  },
+  conditional: {
+    woman:
+      'Workable cha tara 28 ma scooter? Anjali ko Tesla lease ho — at least pretension cha. Cooking basic — rishta-meeting ko taste-test ma fail-fanseu hai. Half kura luka-aune ho — we both know it.',
+    man: 'Workable cha tara 28 ma scooter — Bishal ko Fortuner 3 barsa puranai bhaisakyo. Salary cha but ghar chaina, basically tenant with a job title. Rishta meeting ma half kura luka-aune ho — we both know it.',
+    skip: 'Workable cha tara basics ma cha gap. Ghar chaina, gaadi sano, salary middle — basically pretension ko tenant. Rishta meeting ma half kura luka-aune ho — we both know it.',
+  },
+  disappointed: {
+    woman:
+      'Freelancer, ghar chaina — Anjali ko bachha le tero photo dekhera "aunty ko didi ho?" bhaneko cha. Geeta aunty laai call ja-na bhayo. Save the date for Dashain ko sympathy chiya — already booked cha.',
+    man: 'Freelancer — code for "WiFi sangai bekaar". Aaja bholi ka bachha haru UPSC clear gardai chhan, timi cafe ma laptop ma stare gardai. Bishal le tero LinkedIn block gareko cha — second-hand embarrassment bata. Geeta aunty samma news pugiskyo.',
+    skip: 'Yo CV padhera aunty le chiya bich ma chodi-yin. Job ramro chaina, ghar chaina — tero batch ko WhatsApp group ma sahanubhuti emoji aaucha. Geeta aunty laai news pugiskyo.',
+  },
+  emergency: {
+    woman:
+      'Yo CV padhera aunty ko chiya thanda bhayo. Job chaina, ghar chaina, bani-byabahaar pani audit. 35 ma ek-bigha jamin ko biraalo sangai Dashain ko trailer dekhaa-cha aunty le. Priest call gariskeko — for you, not the marriage.',
+    man: 'Yo CV padhera aunty ko chiya thanda bhayo. Job chaina, ghar chaina, gaadi chaina, bani-byabahaar pani prasna. Bihe ta dur ko kura — life insurance ko nominee section khali ho. Aamabuwa le pre-grief gareko cha already. Priest call gareko — for you, not the marriage.',
+    skip: 'Yo CV padhera aunty ko chiya thanda bhayo. Job chaina, ghar chaina, bani-byabahaar pani audit garnu parne avastha. 40 ma cat sangai Dashain — aunty le pahile nai dekhi sakeko cha. Priest call gareko — for you, not the marriage.',
+  },
+}
+
+const PROPOSAL_ESTIMATE: Record<Verdict, string> = {
+  approved:
+    'Pacha-cha jana — sincere haru. Geeta aunty matra kohi mathi sochirakkhi cha.',
+  conditional: 'Dui jana — duitai desperate aunty haru bata.',
+  disappointed: 'Ek jana — dur ko relative jasle kohi chinchhainan.',
+  emergency: 'Zero — aamabuwa le Dashain cancel garne kura garchhan.',
+}
+
 export function mockAunty(input: ApprovalInput): AiOutput {
   let s = 50
   if (input.job === 'doctor' || input.job === 'engineer') s += 15
@@ -103,7 +141,7 @@ export function mockAunty(input: ApprovalInput): AiOutput {
   if (input.country !== 'nepal') s += 6
   s = Math.max(0, Math.min(100, s))
 
-  const verdict: AiOutput['verdict'] =
+  const verdict: Verdict =
     s >= 75
       ? 'approved'
       : s >= 50
@@ -111,13 +149,6 @@ export function mockAunty(input: ApprovalInput): AiOutput {
         : s >= 25
           ? 'disappointed'
           : 'emergency'
-
-  const reactions: Record<AiOutput['verdict'], string> = {
-    approved: `${input.job.charAt(0).toUpperCase() + input.job.slice(1)} ho, salary pani thik — Sushma ko chhora le yo profile padhera depression ma jancha. Proposal ko line lagcha — actual line. Tara ahile dekhi humble bhayera basa.`,
-    conditional: `${input.job.charAt(0).toUpperCase() + input.job.slice(1)} ta thik tara ${input.vehicle === 'scooter' || input.vehicle === 'none' ? 'scooter chadhera 28 ma — Bishal ko Fortuner 3 barsa puranai bhaisakyo' : 'salary ramro chaina'}. Basically tenant with a job title. Rishta meeting ma half kura luka-aune ho.`,
-    disappointed: `${input.job === 'freelancer' ? 'Freelancer — code for "WiFi sangai bekaar"' : 'Yo CV pani CV ho?'}. Aaja bholi ko bachha haru UPSC dindai chhan, timi laptop boki coffee shop ma berauchhau. Geeta aunty laai call ja-na bhayo — news ramro hoina.`,
-    emergency: `Yo CV padhera aunty ko chiya thanda bhayo. Job chaina, bani-byabahaar pani prasna, basic survival pani audit garnu parne. Priest call gareko cha — for you, not the marriage.`,
-  }
 
   const flags: string[] = []
   if (input.salaryBand === '<30k')
@@ -144,15 +175,8 @@ export function mockAunty(input: ApprovalInput): AiOutput {
   return {
     score: s,
     verdict,
-    parentReaction: reactions[verdict],
-    proposalEstimate:
-      verdict === 'approved'
-        ? 'Pacha-cha jana — sincere haru. Geeta aunty matra kohi mathi sochirakkhi cha.'
-        : verdict === 'conditional'
-          ? 'Dui jana — duitai desperate aunty haru bata.'
-          : verdict === 'disappointed'
-            ? 'Ek jana — dur ko relative jasle kohi chinchhainan.'
-            : 'Zero — aamabuwa le Dashain cancel garne kura garchhan.',
+    parentReaction: REACTIONS[verdict][input.gender],
+    proposalEstimate: PROPOSAL_ESTIMATE[verdict],
     redFlags: flags.slice(0, 4),
   }
 }

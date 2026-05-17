@@ -40,6 +40,32 @@ describe('buildSystemPrompt', () => {
       expect(sp).toContain(v)
     }
   })
+
+  it('names the persona "Chimeki Aunty"', () => {
+    expect(sp).toContain('Chimeki Aunty')
+  })
+
+  it('introduces a gender lens for flavor', () => {
+    const lower = sp.toLowerCase()
+    expect(lower).toMatch(/gender lens|gender field/)
+    // All three gender values must be referenced for the model to dispatch on them
+    for (const g of ['"man"', '"woman"', '"skip"']) {
+      expect(sp).toContain(g)
+    }
+  })
+
+  it('explicitly locks equal severity across genders', () => {
+    const lower = sp.toLowerCase()
+    // The severity-is-gender-blind rule must survive any future tone tweaks
+    expect(lower).toMatch(
+      /severity is gender-blind|same (score|penalty|hit).*gender|gender.*flavor.*not.*severity/,
+    )
+  })
+
+  it('forbids real names of politicians / celebrities / castes / ethnic groups', () => {
+    const lower = sp.toLowerCase()
+    expect(lower).toMatch(/never name real|no real names/)
+  })
 })
 
 describe('buildUserPrompt', () => {
