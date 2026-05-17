@@ -27,7 +27,7 @@ pnpm test:watch   # interactive
 1. Push this repo to GitHub.
 2. Import to Vercel.
 3. Add `GEMINI_API_KEY` as an environment variable.
-4. Set the production domain (`bihekahile.com`).
+4. Set the production domain (`bihekaile.abhishekg.info.np`).
 
 ## What's where
 

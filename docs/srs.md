@@ -5,7 +5,7 @@
 **Version:** 0.1 (MVP)
 **Owner:** Arjun
 **Stack:** Next.js 16 (App Router) + TypeScript + Tailwind v4 + Google Gemini API
-**Domain (target):** bihekahile.com
+**Domain (target):** bihekaile.abhishekg.info.np
 
 ---
 
@@ -109,7 +109,7 @@ Explicitly optional. Not stored. Not used for negative judgment by the prompt.
 - "Download card" button → PNG via `next/og`'s `ImageResponse`.
   - Story format (1080×1920) and square (1080×1080).
 - "Share" button → Web Share API on mobile, copy-link fallback on desktop.
-- Card includes: score, verdict, one-line roast, `bihekahile.com` watermark.
+- Card includes: score, verdict, one-line roast, domain watermark.
 
 ### FR-5: Rate Limiting
 
@@ -233,7 +233,7 @@ spreads via image, not URL.
 | Question | Answer |
 |----------|--------|
 | Humor edginess | Spicy — sharp roasts, no slurs / taboo |
-| Domain direction | `bihekahile.com` ("Bihe Kahile?" / "बिहे कहिले?") |
+| Domain direction | `bihekaile.abhishekg.info.np` ("Bihe Kahile?" / "बिहे कहिले?") |
 | Result persistence | One-shot, download card only — no DB |
 
 ---
