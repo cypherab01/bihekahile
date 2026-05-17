@@ -3,7 +3,8 @@ import { VerdictSchema, type Verdict } from '@/lib/schemas'
 import { verdictAccent, verdictLabelPlain } from '@/lib/verdict'
 import { DOMAIN, APP_NAME_LATIN } from '@/lib/brand'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 function clampToAscii(s: string): string {
   return s.replace(/[^\x20-\x7E]/g, '').trim()
@@ -152,7 +153,7 @@ export async function GET(req: Request) {
       {
         ...size,
         headers: {
-          'cache-control': 'public, max-age=60',
+          'cache-control': 'no-store',
         },
       },
     )
