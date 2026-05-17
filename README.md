@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# बिहे कहिले? (Bihe Kahile?)
 
-## Getting Started
+Spicy AI Nepali aunty rates your life choices on a 0–100 approval scale.
+One-shot, downloadable share card, no database.
 
-First, run the development server:
+## Local dev
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+cp .env.example .env.local
+# Edit .env.local — either set GEMINI_API_KEY (free at https://aistudio.google.com/app/apikey)
+# or set USE_MOCK_AUNTY=true to skip the API entirely
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tests
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm test         # one shot
+pnpm test:watch   # interactive
+```
 
-## Learn More
+## Deploy (Vercel)
 
-To learn more about Next.js, take a look at the following resources:
+1. Push this repo to GitHub.
+2. Import to Vercel.
+3. Add `GEMINI_API_KEY` as an environment variable.
+4. Set the production domain (`bihekahile.abhishekg.info.np`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What's where
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `app/page.tsx` — landing page, form ↔ result orchestrator
+- `app/api/score/route.ts` — POST: validate + call Gemini + return JSON
+- `app/api/og/route.tsx` — GET: ImageResponse share card
+- `app/about/page.tsx` — disclaimer + how-it-works
+- `lib/` — schemas, prompt, LLM client (Gemini), rate limiter, brand constants, verdict helper
+- `docs/srs.md` — the spec
+- `docs/superpowers/plans/` — implementation plans
 
-## Deploy on Vercel
+## Safety guardrails
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The system prompt in `lib/prompt.ts` forbids caste-, religion-, appearance-,
+and body-based judgment and gender double standards. These constraints are
+test-locked — `lib/__tests__/prompt.test.ts` will fail if they're removed.
