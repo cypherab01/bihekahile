@@ -18,6 +18,17 @@ export function verdictLabel(v: Verdict): string {
   return LABELS[v]
 }
 
+const PLAIN_LABELS: Record<Verdict, string> = {
+  approved: 'Aunty Approved',
+  conditional: 'Conditional Approval',
+  disappointed: 'Aunty Disappointed',
+  emergency: 'Family Emergency',
+}
+
+export function verdictLabelPlain(v: Verdict): string {
+  return PLAIN_LABELS[v]
+}
+
 const ACCENTS: Record<Verdict, { fg: string; bg: string }> = {
   approved: { fg: '#1b5e20', bg: '#d7f3d8' },
   conditional: { fg: '#7c4a03', bg: '#ffe8b3' },

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { verdictFromScore, verdictLabel } from '@/lib/verdict'
+import { verdictFromScore, verdictLabel, verdictLabelPlain } from '@/lib/verdict'
 
 describe('verdictFromScore', () => {
   it('returns "emergency" for 0–24', () => {
@@ -24,5 +24,16 @@ describe('verdictLabel', () => {
   it('returns a label for each verdict', () => {
     expect(verdictLabel('approved')).toMatch(/Approved/)
     expect(verdictLabel('emergency')).toMatch(/Emergency/)
+  })
+})
+
+describe('verdictLabelPlain (for OG image — must be Latin/font-safe)', () => {
+  it('returns ASCII-only labels for every verdict so satori does not chase dynamic fonts', () => {
+    for (const v of ['approved', 'conditional', 'disappointed', 'emergency'] as const) {
+      const label = verdictLabelPlain(v)
+      expect(label, `verdict ${v} → "${label}" must be ASCII`).toMatch(
+        /^[\x20-\x7E]+$/,
+      )
+    }
   })
 })
